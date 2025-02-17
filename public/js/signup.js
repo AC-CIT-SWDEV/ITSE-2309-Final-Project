@@ -5,11 +5,10 @@ document.getElementById('signupForm').addEventListener('submit', async (event) =
     const username = document.getElementById('username').value;
     const password = document.getElementById('password').value;
 
-    // HERE, WE SEND THE USERNAME AND PASSWORD WITHIN THE BODY OF OUR REQUEST TO THE BACKEND AT ENDPOING '/signup'
-
     try {
-        const response = await fetch('/signup', {
+        const response = await fetch('/api/signup', {
             method: 'POST',
+            credentials: 'include',
             headers: {
                 'Content-Type': 'application/json'
             },
@@ -20,7 +19,7 @@ document.getElementById('signupForm').addEventListener('submit', async (event) =
 
         if (response.ok) {
             alert(data.message);
-            window.location.href = 'index.html'; // Redirect to login page
+            window.location.href = 'dashboard.html'; // Redirect to login page
         } else {
             alert(data.error);
         }
