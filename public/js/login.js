@@ -1,11 +1,11 @@
 // script.js (Login Page)
-document.getElementById('loginForm').addEventListener('submit', function(event) {
+document.getElementById('loginForm').addEventListener('submit', async function(event) {
     event.preventDefault();
 
     const username = document.getElementById('username').value;
     const password = document.getElementById('password').value;
 
-    fetch('/api/login', {  // Send login request to the server
+    await fetch('/api/login', {  // Send login request to the server
         method: 'POST',
         credentials: 'include',
         headers: {
@@ -14,24 +14,32 @@ document.getElementById('loginForm').addEventListener('submit', function(event) 
         body: JSON.stringify({ username, password })
     })
     .then(response => response.json())
-    .then(data => {
+    .then(async data => {
         if (data.success) {
-            window.location.href = 'dashboard.html'; // Redirect to dashboard
+            // bake the cookie!
+            try {
+                await fetch(`/api/bake-my-cookie`, {
+                  method: 'POST',
+                  credentials: 'include',
+                  headers: {
+                    'Authorization': `Bearer ${data.payload.username}`,
+                  },
+                }).then(response => response.json())
+                  .then(data => {
+                    console.log(data.message);
+                  })
+                  .catch(err => {
+                    console.log(err);
+                  });
+                
+                  window.location.href = '/dashboard';
+                  
+              } catch (err) {
+                console.log(err);
+              }    
+
         } else {
             alert('Invalid credentials');
         }
     });
-});
-
-// Check for existing token on login page load
-document.addEventListener('DOMContentLoaded', function() {
-    if (document.cookie) {
-
-        const token = document.cookie.split('; ').find(row => row.startsWith('token=')).split('=');
-
-        if (token) {
-            // If token exists, redirect to dashboard
-            window.location.href = 'dashboard.html';
-        }
-    };
 });

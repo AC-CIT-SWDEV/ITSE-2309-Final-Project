@@ -4,15 +4,51 @@ document.addEventListener('DOMContentLoaded', function() {
     const dataDisplay = document.getElementById('dataDisplay');
     const dataForm = document.getElementById('dataForm');
 
-    // Fetch user data (no need to send username, it's in the JWT)
-    fetch('api/data', {
+    fetch('/api/data', {
         method: 'GET',
         credentials: 'include'
-    })
-      .then(response => response.json())
+    }).then(response => {
+        if (!response.ok) {
+          if (response.status === 401) {
+            window.location.href = '/';
+          } else {
+            throw new Error('Network response was not ok');
+          }
+        }
+        return response.json(); // If successful
+      })
       .then(data => {
-            displayData(data);
+        const username = data.username;
+        const welcomeElement = document.getElementById('welcome');
+        if (welcomeElement) welcomeElement.textContent = `Welcome, ${username}!`;
+        displayData(data.results);
+      })
+      .catch(error => {
+        console.error('Error:', error);
+      });
+
+    const logoutButton = document.getElementById('logoutButton');
+
+    if (logoutButton) {
+      logoutButton.addEventListener('click', () => {
+        fetch('/logout', { 
+          method: 'GET',
+          credentials: 'include' 
+        })
+      .then(response => {
+          if (response.ok) {
+            // Redirect to login (the server should already do this, but this is a fallback)
+            window.location.href = '/'; 
+          } else {
+            // Handle errors if the logout fails
+            console.error('Logout failed'); 
+          }
+        })
+      .catch(error => {
+          console.error('Error during logout:', error);
         });
+      });
+    }
 
     dataForm.addEventListener('submit', function (event) {
         event.preventDefault();
@@ -24,9 +60,20 @@ document.addEventListener('DOMContentLoaded', function() {
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ data: newData }) // No need to send username
+            body: JSON.stringify({ data: newData })
         })
-      .then(response => response.json())
+        .then(response => {
+          if (!response.ok) {
+              if (response.status === 401) {
+                  // Redirect to login page
+                  window.location.href = '/login'; 
+              } else {
+                  // Handle other errors
+                  throw new Error('Network response was not ok');
+              }
+            }
+          return response.json(); 
+        })
       .then(data => {
             displayData(data);
             document.getElementById('newData').value = '';
@@ -51,7 +98,7 @@ document.addEventListener('DOMContentLoaded', function() {
     function handleEdit(item) {
         const newValue = prompt("Enter new value", item.data);
         if (newValue) {
-            fetch(`http://localhost:3000/api/data/${item.id}`, {
+            fetch(`/api/data/${item.id}`, {
                 method: 'PUT',
                 credentials: 'include',
                 headers: {
@@ -59,7 +106,18 @@ document.addEventListener('DOMContentLoaded', function() {
                 },
                 body: JSON.stringify({ data: newValue })
             })
-          .then(response => response.json())
+            .then(response => {
+              if (!response.ok) {
+                  if (response.status === 401) {
+                      // Redirect to login page
+                      window.location.href = '/login'; 
+                  } else {
+                      // Handle other errors
+                      throw new Error('Network response was not ok');
+                  }
+                }
+              return response.json(); 
+            })
           .then(data => displayData(data));
         }
     }
@@ -70,7 +128,18 @@ document.addEventListener('DOMContentLoaded', function() {
                 method: 'DELETE',
                 credentials: 'include'
             })
-          .then(response => response.json())
+            .then(response => {
+              if (!response.ok) {
+                  if (response.status === 401) {
+                      // Redirect to login page
+                      window.location.href = '/login'; 
+                  } else {
+                      // Handle other errors
+                      throw new Error('Network response was not ok');
+                  }
+                }
+              return response.json(); 
+            })
           .then(data => displayData(data));
         }
     }
