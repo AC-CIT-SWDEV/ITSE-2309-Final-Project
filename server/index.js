@@ -83,7 +83,7 @@ app.use(express.static(path.join(__dirname, '../public')));
 const mysql_host = 'localhost';
 const mysql_user = 'root';
 const mysql_password = 'root';
-const mysql_db = 'notes'; // <-- 1. CHANGE HERE
+const mysql_db = ''; // <-- 1. CHANGE HERE
 
 const db = mysql.createConnection({
     host: mysql_host,
