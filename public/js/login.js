@@ -1,4 +1,8 @@
-// script.js (Login Page)
+/***********************************************************************
+
+DO NOT ALTER THIS PAGE!!
+
+***********************************************************************/
 document.getElementById('loginForm').addEventListener('submit', async function(event) {
     event.preventDefault();
 

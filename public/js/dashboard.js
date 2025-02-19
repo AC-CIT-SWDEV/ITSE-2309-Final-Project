@@ -1,9 +1,81 @@
-// dashboard.js (Dashboard)
+/***********************************************************************
+
+DO NOT ALTER THIS PAGE!!
+
+***********************************************************************/
 document.addEventListener('DOMContentLoaded', function() {
 
     const dataDisplay = document.getElementById('dataDisplay');
     const dataForm = document.getElementById('dataForm');
 
+    // ADMIN HTML
+    const adminBtnContainer = document.createElement('div');
+    adminBtnContainer.id = 'adminBtnContainer';
+    adminBtnContainer.style.display = 'none';
+
+    const viewUsersBtn = document.createElement('button');
+    viewUsersBtn.id = 'viewUsersBtn';
+    viewUsersBtn.textContent = 'View Users';
+
+    const deleteUserBtn = document.createElement('button');
+    deleteUserBtn.id = 'deleteUserBtn';
+    deleteUserBtn.textContent = 'Delete User';
+
+    const filterInput = document.createElement('input');
+    filterInput.type = 'text';
+    filterInput.id = 'filterInput';
+    filterInput.placeholder = 'Filter data';
+
+    const filterBtn = document.createElement('button');
+    filterBtn.id = 'filterBtn';
+    filterBtn.textContent = 'Filter';
+
+    viewUsersBtn.addEventListener('click', () => {
+      fetch('/api/admin/users', {
+        method: 'GET',
+        credentials: 'include'
+      })
+    .then(response => response.json())
+    .then(users => {
+      const formattedData = users.map(user => {
+        return `ID: ${user.id}\nData: ${user.username}`;
+      }).join('\n\n');
+    
+      alert(formattedData); 
+      });
+    });
+
+    deleteUserBtn.addEventListener('click', () => {
+      const userIdToDelete = prompt("Enter the ID of the user to delete:");
+      if (userIdToDelete) {
+        fetch(`/api/admin/users/${userIdToDelete}`, {
+          method: 'DELETE',
+          credentials: 'include'
+        })
+      .then(response => response.json())
+      .then(data => {
+          alert(data.error.sqlMessage); 
+        });
+      }
+    });
+
+    filterBtn.addEventListener('click', () => {
+      const filterValue = filterInput.value;
+      fetch(`/api/data/filter?filter=${filterValue}`, {
+        method: 'GET',
+        credentials: 'include'
+      })
+    .then(response => response.json())
+    .then(filteredData => {
+      const formattedData = filteredData.map(item => {
+        return `ID: ${item.id}\nData: ${item.data}`;
+      }).join('\n\n');
+    
+      alert(formattedData); 
+      });
+    });
+
+    // START TASKS FOR PAGE LOAD
     fetch('/api/data', {
         method: 'GET',
         credentials: 'include'
@@ -21,6 +93,18 @@ document.addEventListener('DOMContentLoaded', function() {
         const username = data.username;
         const welcomeElement = document.getElementById('welcome');
         if (welcomeElement) welcomeElement.textContent = `Welcome, ${username}!`;
+
+        if (data.isAdmin) {
+          const adminBtnContainer = document.createElement('div');
+
+          adminBtnContainer.appendChild(viewUsersBtn);
+          adminBtnContainer.appendChild(deleteUserBtn);
+          adminBtnContainer.appendChild(filterInput);
+          adminBtnContainer.appendChild(filterBtn);
+
+          dataForm.insertAdjacentElement('afterend',  adminBtnContainer);
+        }
+
         displayData(data.results);
       })
       .catch(error => {

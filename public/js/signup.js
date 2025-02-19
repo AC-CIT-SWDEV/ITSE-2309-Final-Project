@@ -1,5 +1,8 @@
-// signup.js (Client-side JavaScript for signup)
+/***********************************************************************
 
+DO NOT ALTER THIS PAGE!!
+
+***********************************************************************/
 document.getElementById('signupForm').addEventListener('submit', async (event) => {
     event.preventDefault();
     const username = document.getElementById('username').value;
