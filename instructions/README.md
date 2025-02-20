@@ -72,6 +72,18 @@
 2. **Create tables:**
    - Create the necessary tables in your database!
 
+   > Table 1: users | *all lowercase table name*
+   - user_id | int
+   - username | varchar(255)
+   - password | varchar(255)
+   - isAdmin | BOOLEAN 
+
+   > Table 2: data | *all lowercase table name*
+   - id | int 
+   - user_id | int
+   - data | TEXT
+   
+
 ### **Complete the API Endpoints**
 
 1. **Edit `index.js`:**
