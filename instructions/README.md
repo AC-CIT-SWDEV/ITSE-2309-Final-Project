@@ -68,6 +68,15 @@
      ```sql
      \sql
      ```
+     
+    - Create a database called **notes**.
+        ```sql
+        create database notes;
+        ```
+    - Use our new database **notes**.
+        ```sql
+        use notes;
+        ```
 
 2. **Create tables:**
    - Create the necessary tables in your database!
@@ -83,6 +92,9 @@
    - user_id | int
    - data | TEXT
    
+  > **Make sure to include auto_incremenet for your Primary Keys!**-
+  
+  > **Make sure to include NOT NULL for all Primary Keys & Foreign Keys!** 
 
 ### **Complete the API Endpoints**
 
@@ -97,5 +109,7 @@
    - Observe the output in your command prompt or terminal for any error messages.
    - Test the functionality of the application in your browser.
    - Use the MySQL Shell to view the data in your database and verify that your SQL statements are working correctly.
+   - **For any (1) user in your users table, set the isAdmin column to 1 (*aka true*) and login with that user. You should then try the admin features in the dashboard**
+
 
 ### > Good luck, and have fun building your final project!
