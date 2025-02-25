@@ -92,7 +92,7 @@
    - user_id | int
    - data | TEXT
    
-  > **Make sure to include auto_incremenet for your Primary Keys!**-
+  > **Make sure to include auto_increment for your Primary Keys!**-
   
   > **Make sure to include NOT NULL for all Primary Keys & Foreign Keys!** 
 
