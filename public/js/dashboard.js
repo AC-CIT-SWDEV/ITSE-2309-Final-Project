@@ -38,7 +38,7 @@ document.addEventListener('DOMContentLoaded', function() {
     .then(response => response.json())
     .then(users => {
       const formattedData = users.map(user => {
-        return `ID: ${user.id}\nData: ${user.username}`;
+        return `ID: ${user.user_id}\nData: ${user.username}`;
       }).join('\n\n');
     
       alert(formattedData); 
