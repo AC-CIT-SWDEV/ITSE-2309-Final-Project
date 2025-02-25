@@ -200,7 +200,7 @@ const withAuth = (req, res, next) => {
             const resUser = results[0];
 
             const user = {
-                id: resUser.id,
+                id: resUser.user_id,
                 username: resUser.username
             }
 
